@@ -1,0 +1,5 @@
+# exclude vendor
+/vendor/*
+
+# exclude db test files
+/database/test.db
