@@ -12,27 +12,27 @@ import (
 
 //Reader implements .csv reading methods and data aggregation
 type Reader struct {
-	primbuck models.PrimaryBucket
+	Primbuck models.PrimaryBucket
 }
 
 //FillNames reads in and structures the csv with names
 func (r *Reader) FillNames(filepath string) error {
 	readread, err := innerReader(filepath)
-	r.primbuck.Names = readread
+	r.Primbuck.Names = readread
 	return err
 }
 
 //FillSurnames reads in and structures the csv with surnames
 func (r *Reader) FillSurnames(filepath string) error {
 	readread, err := innerReader(filepath)
-	r.primbuck.Surnames = readread
+	r.Primbuck.Surnames = readread
 	return err
 }
 
 //FillReviews reads in and structures the csv with reviews
 func (r *Reader) FillReviews(filepath string) error {
 	readread, err := innerReader(filepath)
-	r.primbuck.Reviews = readread
+	r.Primbuck.Reviews = readread
 	return err
 }
 

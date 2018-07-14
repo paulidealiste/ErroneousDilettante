@@ -114,18 +114,23 @@ func (s *Store) CrunchEntities() (string, error) {
 		bn := tx.Bucket(namesBucket)
 		bs := tx.Bucket(surnamesBucket)
 		br := tx.Bucket(reviewsBucket)
-		//CURSORS AND RANDOM LENGTH//
-		rln := randomWhole(1, bn.Stats().KeyN+1)
-		rls := randomWhole(1, bs.Stats().KeyN+1)
-		rlr := randomWhole(1, br.Stats().KeyN+1)
-		cn := bn.Cursor()
-		cs := bs.Cursor()
-		cr := br.Cursor()
-		//CRUNCH LOOPS WITH RANDOM COUNTERS//
+		//CURSORS AND RANDOM LENGTH FOR EACH FIELD//
 		crunched := []string{}
-		cursorTraverser(cn, rln, &crunched)
-		cursorTraverser(cs, rls, &crunched)
-		cursorTraverser(cr, rlr, &crunched)
+		if bn.Stats().KeyN > 1 {
+			rln := randomWhole(1, bn.Stats().KeyN+1)
+			cn := bn.Cursor()
+			cursorTraverser(cn, rln, &crunched)
+		}
+		if bs.Stats().KeyN > 1 {
+			rls := randomWhole(1, bs.Stats().KeyN+1)
+			cs := bs.Cursor()
+			cursorTraverser(cs, rls, &crunched)
+		}
+		if br.Stats().KeyN > 1 {
+			rlr := randomWhole(1, br.Stats().KeyN+1)
+			cr := br.Cursor()
+			cursorTraverser(cr, rlr, &crunched)
+		}
 		crucn = strings.Join(crunched, " ")
 		return nil
 	})

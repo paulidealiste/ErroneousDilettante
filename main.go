@@ -8,6 +8,7 @@ import (
 
 	"github.com/paulidealiste/ErroneusDilettante/cmdos"
 	"github.com/paulidealiste/ErroneusDilettante/database"
+	"github.com/paulidealiste/ErroneusDilettante/models"
 	"github.com/paulidealiste/ErroneusDilettante/reader"
 	"github.com/paulidealiste/ErroneusDilettante/writer"
 )
@@ -38,6 +39,9 @@ func main() {
 	}
 	if *flgs.BasePath != flag.Lookup("basepath").DefValue {
 		rawdbaser.KickstartDB(*flgs.BasePath)
+		databaseFiller(&rawreader, &rawdbaser)
+	} else {
+		log.Fatal("Database path is mandatory.")
 	}
 	if *flgs.RandomPath != flag.Lookup("randompath").DefValue {
 		rawwriter.SetOutput(*flgs.RandomPath)
@@ -52,7 +56,24 @@ func main() {
 		}
 		repeats = rpts
 	}
-	loopCrunchPrinter(repeats, &rawwriter, &rawdbaser)
+	if *flgs.PerformCrunch == true {
+		loopCrunchPrinter(repeats, &rawwriter, &rawdbaser)
+	}
+}
+
+func databaseFiller(rreader *reader.Reader, dbaser *database.Store) {
+	if len(rreader.Primbuck.Names) > 0 {
+		nerr := dbaser.HoopEntities(rreader.Primbuck.Names, models.Names)
+		fmt.Println(nerr)
+	}
+	if len(rreader.Primbuck.Surnames) > 0 {
+		serr := dbaser.HoopEntities(rreader.Primbuck.Surnames, models.Surnames)
+		fmt.Println(serr)
+	}
+	if len(rreader.Primbuck.Reviews) > 0 {
+		rerr := dbaser.HoopEntities(rreader.Primbuck.Reviews, models.Reviews)
+		fmt.Println(rerr)
+	}
 }
 
 func loopCrunchPrinter(repeats int, wwriter *writer.Writer, dbaser *database.Store) {
