@@ -7,6 +7,7 @@ import (
 	"hash/fnv"
 	"math/rand"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/boltdb/bolt"
@@ -100,11 +101,12 @@ func (s *Store) CheerEntities(bucket models.TargetBucket) error {
 }
 
 //CrunchEntities prints randomly concatenated entities from the database
-func (s *Store) CrunchEntities() error {
+func (s *Store) CrunchEntities() (string, error) {
 	ldb, _ := bolt.Open(s.fnp, 0600, nil)
 	s.db = ldb
 	defer s.db.Close()
-	return s.db.View(func(tx *bolt.Tx) error {
+	var crucn string
+	err := s.db.View(func(tx *bolt.Tx) error {
 		fmt.Println("---")
 		fmt.Println("Crunch start")
 		fmt.Println("---")
@@ -124,9 +126,10 @@ func (s *Store) CrunchEntities() error {
 		cursorTraverser(cn, rln, &crunched)
 		cursorTraverser(cs, rls, &crunched)
 		cursorTraverser(cr, rlr, &crunched)
-		fmt.Println(crunched)
+		crucn = strings.Join(crunched, " ")
 		return nil
 	})
+	return crucn, err
 }
 
 func cursorTraverser(crsr *bolt.Cursor, bound int, crunched *[]string) {

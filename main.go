@@ -3,10 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"strconv"
 
 	"github.com/paulidealiste/ErroneusDilettante/cmdos"
 	"github.com/paulidealiste/ErroneusDilettante/database"
 	"github.com/paulidealiste/ErroneusDilettante/reader"
+	"github.com/paulidealiste/ErroneusDilettante/writer"
 )
 
 func main() {
@@ -14,6 +17,7 @@ func main() {
 	flag.Parse()
 	rawreader := reader.Reader{}
 	rawdbaser := database.Store{}
+	rawwriter := writer.Writer{}
 	if *flgs.Names != flag.Lookup("names").DefValue {
 		nerr := rawreader.FillNames(*flgs.Names)
 		if nerr != nil {
@@ -35,5 +39,36 @@ func main() {
 	if *flgs.BasePath != flag.Lookup("basepath").DefValue {
 		rawdbaser.KickstartDB(*flgs.BasePath)
 	}
+	if *flgs.RandomPath != flag.Lookup("randompath").DefValue {
+		rawwriter.SetOutput(*flgs.RandomPath)
+	}
+	var repeats int
+	if *flgs.RandomQuant == flag.Lookup("randomquant").DefValue {
+		repeats = 1
+	} else {
+		rpts, err := strconv.Atoi(*flgs.RandomQuant)
+		if err != nil {
+			log.Fatal("Quantity probably not an integer number!")
+		}
+		repeats = rpts
+	}
+	loopCrunchPrinter(repeats, &rawwriter, &rawdbaser)
+}
 
+func loopCrunchPrinter(repeats int, wwriter *writer.Writer, dbaser *database.Store) {
+	var loopcrunched []string
+	for j := 0; j < repeats; j++ {
+		strng, err := dbaser.CrunchEntities()
+		if err != nil {
+			panic(err)
+		}
+		loopcrunched = append(loopcrunched, strng)
+	}
+	if wwriter.OutputSet == true {
+		wwriter.WriteToPath(loopcrunched)
+	} else {
+		for _, lpc := range loopcrunched {
+			fmt.Println(lpc)
+		}
+	}
 }

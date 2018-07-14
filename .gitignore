@@ -3,3 +3,5 @@
 
 # exclude db test files
 /database/test.db
+/writer/test.txt
+testran.txt

@@ -26,5 +26,6 @@ func TestHoopEntities(t *testing.T) {
 	fmt.Println(err)
 	fmt.Println("Start reading")
 	teststore.CheerEntities(models.Names)
-	teststore.CrunchEntities()
+	crucn, _ := teststore.CrunchEntities()
+	fmt.Println(crucn)
 }
