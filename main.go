@@ -10,6 +10,7 @@ import (
 	"github.com/paulidealiste/ErroneusDilettante/database"
 	"github.com/paulidealiste/ErroneusDilettante/models"
 	"github.com/paulidealiste/ErroneusDilettante/reader"
+	"github.com/paulidealiste/ErroneusDilettante/webapp"
 	"github.com/paulidealiste/ErroneusDilettante/writer"
 )
 
@@ -58,6 +59,9 @@ func main() {
 	}
 	if *flgs.PerformCrunch == true {
 		loopCrunchPrinter(repeats, &rawwriter, &rawdbaser)
+	}
+	if *flgs.StartWebserver == true {
+		webapp.MockStart()
 	}
 }
 

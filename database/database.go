@@ -107,9 +107,6 @@ func (s *Store) CrunchEntities() (string, error) {
 	defer s.db.Close()
 	var crucn string
 	err := s.db.View(func(tx *bolt.Tx) error {
-		fmt.Println("---")
-		fmt.Println("Crunch start")
-		fmt.Println("---")
 		//BUCKETS//
 		bn := tx.Bucket(namesBucket)
 		bs := tx.Bucket(surnamesBucket)

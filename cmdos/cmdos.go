@@ -5,13 +5,14 @@ import "flag"
 
 // Flags are the available fill-fields
 type Flags struct {
-	Names         *string
-	Surnames      *string
-	Reviews       *string
-	BasePath      *string
-	RandomPath    *string
-	RandomQuant   *string
-	PerformCrunch *bool
+	Names          *string
+	Surnames       *string
+	Reviews        *string
+	BasePath       *string
+	RandomPath     *string
+	RandomQuant    *string
+	PerformCrunch  *bool
+	StartWebserver *bool
 }
 
 // Initialize defines all the possible fill-fields
@@ -24,5 +25,6 @@ func Initialize() Flags {
 	flgs.RandomPath = flag.String("randompath", "-", "filename and path for writing the results into")
 	flgs.RandomQuant = flag.String("randomquant", "1", "number of randomized results in the output")
 	flgs.PerformCrunch = flag.Bool("crunch", false, "whether crunch should be performed")
+	flgs.StartWebserver = flag.Bool("webapp", false, "start the web app")
 	return flgs
 }
