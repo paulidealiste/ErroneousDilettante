@@ -61,7 +61,7 @@ func main() {
 		loopCrunchPrinter(repeats, &rawwriter, &rawdbaser)
 	}
 	if *flgs.StartWebserver == true {
-		webapp.MockStart()
+		webapp.MockStart(&rawdbaser)
 	}
 }
 
