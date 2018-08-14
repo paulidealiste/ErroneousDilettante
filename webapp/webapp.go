@@ -32,7 +32,7 @@ var defaultHandlerTemplate = `
   <script src="https://unpkg.com/umbrellajs"></script>
 </head>
 
-<body>
+<body class="uk-overflow-hidden">
   <div class="uk-flex uk-width-1-1 uk-height-viewport uk-flex-stretch uk-flex-column">
     <div class="uk-active uk-background-primary">
       <nav class="uk-navbar-container uk-margin uk-margin-small-bottom" uk-navbar>
@@ -47,19 +47,32 @@ var defaultHandlerTemplate = `
       </nav>
     </div>
     <div class="uk-flex uk-flex uk-width-1-1 uk-height-1-1 uk-flex-1 uk-background-muted uk-padding-small uk-text-small">
-      <div class="uk-card uk-card-default uk-card-body uk-width-1-3 uk-padding-remove">
+      <div class="uk-card uk-card-default uk-width-1-4 uk-padding-remove">
         <div class="uk-card-header">
           <button id="wildbutton" class="uk-button uk-button-default uk-width-1-1">Call erroneus</button>
         </div>
-        <div class="uk-flex uk-width-1-1 uk-card-body uk-overflow-auto uk-height-max-small">
-          <div class="uk-width-1-2">
-            <ul id="DilettanteName" class="uk-list uk-list-divider">
-            </ul>
+        <div class="uk-flex uk-width-1-1 uk-card-body uk-overflow-auto uk-height-max-small uk-padding-remove">
+          <div id="DilettanteName" class="uk-width-1-1">
           </div>
-          <div class="uk-width-1-2">
-            <ul id="DilettanteSurname" class="uk-list uk-list-divider">
-            </ul>
+        </div>
+      </div>
+      <div class="uk-card uk-card-default uk-flex uk-flex-column uk-flex-1 uk-margin-small-left">
+        <div class="uk-card-header uk-flex">
+          <div class="uk-flex-1">
+            <h4 id="chosenvictim" class="uk-margin-remove uk-text-uppercase">&nbsp;</h4>
           </div>
+          <div class="uk-margin-small-left">
+            <button id="rantbutton" class="uk-button uk-button-default uk-width-1-1">Save this rant</button>
+          </div>
+        </div>
+        <div class="uk-card-body uk-padding-small uk-flex uk-flex-1">
+          <form class="uk-height-1-1 uk-width-1-1">
+            <fieldset class="uk-fieldset uk-height-1-1 uk-width-1-1">
+              <div class="uk-margin uk-height-1-1 uk-width-1-1">
+                <textarea class="uk-textarea uk-height-1-1 uk-width-1-1" placeholder="Rant if not any!" style="resize: none"></textarea>
+              </div>
+            </fieldset>
+          </form>
         </div>
       </div>
     </div>
@@ -68,14 +81,23 @@ var defaultHandlerTemplate = `
 <script>
   //Elements
   let lbtn = u('#wildbutton');
+  let rbtn = u('#rantbutton');
   let eron = u('#DilettanteName');
-  let eros = u('#DilettanteSurname');
+  let victim = u('#chosenvictim');
+  //Interactions
+  let chooseNameli = (e) => {
+    let elm = u(e.target);
+    u('div.reprobationRow').removeClass('uk-background-secondary uk-light');
+    elm.parent().addClass('uk-background-secondary uk-light');
+    victim.text(elm.text());
+  };
   //Functions
   let renderResponse = (person) => {
-    const nameli = '<li>' + person.Name + '</li>';
-    eron.append(nameli);
-    const surnameli = '<li>' + person.Surname + '</li>';
-    eros.append(surnameli);
+    const nameli = '<div class="reprobationRow uk-padding-small" style="border-bottom: 1px solid grey"><span style="cursor: pointer;" class="uk-width-1-1">' + person.Name + ' ' + person.Surname + '</span></div>';
+    eron.append(nameli)
+      .find('span')
+      .off('click')
+      .handle('click', chooseNameli);
   };
   //Handlers
   lbtn.handle('click', async e => {
@@ -83,10 +105,10 @@ var defaultHandlerTemplate = `
       method: 'POST'
     });
     const data = await res.json();
-    console.log('Response data: ', data);
     renderResponse(data);
   });
 </script>
+
 </html>
 `
 
