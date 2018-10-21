@@ -4,9 +4,10 @@
 <head>
   <meta charset="utf-8">
   <title>Erroneus Dilettante</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.10/css/uikit.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.10/js/uikit.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.10/js/uikit-icons.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.19/css/uikit.min.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.19/js/uikit.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.19/js/uikit-icons.min.js"></script>
   <script src="https://unpkg.com/umbrellajs"></script>
 </head>
 
@@ -56,35 +57,5 @@
     </div>
   </div>
 </body>
-<script>
-  //Elements
-  let lbtn = u('#wildbutton');
-  let rbtn = u('#rantbutton');
-  let eron = u('#DilettanteName');
-  let victim = u('#chosenvictim');
-  //Interactions
-  let chooseNameli = (e) => {
-    let elm = u(e.target);
-    u('div.reprobationRow').removeClass('uk-background-secondary uk-light');
-    elm.parent().addClass('uk-background-secondary uk-light');
-    victim.text(elm.text());
-  };
-  //Functions
-  let renderResponse = (person) => {
-    const nameli = '<div class="reprobationRow uk-padding-small" style="border-bottom: 1px solid grey"><span style="cursor: pointer;" class="uk-width-1-1">' + person.Name + ' ' + person.Surname + '</span></div>';
-    eron.append(nameli)
-      .find('span')
-      .off('click')
-      .handle('click', chooseNameli);
-  };
-  //Handlers
-  lbtn.handle('click', async e => {
-    const res = await fetch('/erroneus', {
-      method: 'POST'
-    });
-    const data = await res.json();
-    renderResponse(data);
-  });
-</script>
-
+<script src="engine.js"></script>
 </html>

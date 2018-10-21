@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/boltdb/bolt"
-	"github.com/paulidealiste/ErroneusDilettante/models"
+	"github.com/paulidealiste/ErroneusDilletante/models"
 )
 
 var namesBucket = []byte("NAMES")

@@ -6,12 +6,12 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/paulidealiste/ErroneusDilettante/cmdos"
-	"github.com/paulidealiste/ErroneusDilettante/database"
-	"github.com/paulidealiste/ErroneusDilettante/models"
-	"github.com/paulidealiste/ErroneusDilettante/reader"
-	"github.com/paulidealiste/ErroneusDilettante/webapp"
-	"github.com/paulidealiste/ErroneusDilettante/writer"
+	"github.com/paulidealiste/ErroneusDilletante/cmdos"
+	"github.com/paulidealiste/ErroneusDilletante/database"
+	"github.com/paulidealiste/ErroneusDilletante/models"
+	"github.com/paulidealiste/ErroneusDilletante/reader"
+	"github.com/paulidealiste/ErroneusDilletante/webapp"
+	"github.com/paulidealiste/ErroneusDilletante/writer"
 )
 
 func main() {
