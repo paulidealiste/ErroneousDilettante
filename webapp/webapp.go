@@ -35,7 +35,6 @@ func (dbh *dbaseHandler) respond() ErroneusResponse {
 		return resp
 	}
 	resplist := strings.Split(respstring, " ")
-	fmt.Println(resplist)
 	resp.Name = resplist[0]
 	resp.Surname = resplist[1]
 	return resp

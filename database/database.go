@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/boltdb/bolt"
 	"github.com/paulidealiste/ErroneusDilletante/models"
+	bolt "go.etcd.io/bbolt"
 )
 
 var namesBucket = []byte("NAMES")

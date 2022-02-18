@@ -2,7 +2,9 @@
 /vendor/*
 
 # exclude db test files
-/database/test.db
-/writer/test.txt
-testran.txt
-AceArtists.db
+/database/*.db
+/writer/*.txt
+*.csv
+
+# Exlude locally built binary
+ErroneusDilletante
