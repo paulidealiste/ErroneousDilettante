@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/paulidealiste/ErroneusDilletante/models"
+	"github.com/paulidealiste/ErroneousDilettante/models"
 )
 
 func TestKickstartDB(t *testing.T) {

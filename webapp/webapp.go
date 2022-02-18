@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/paulidealiste/ErroneusDilletante/database"
+	"github.com/paulidealiste/ErroneousDilettante/database"
 )
 
 var dbhand dbaseHandler

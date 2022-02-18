@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/paulidealiste/ErroneusDilletante/models"
+	"github.com/paulidealiste/ErroneousDilettante/models"
 	bolt "go.etcd.io/bbolt"
 )
 

@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/paulidealiste/ErroneusDilletante/models"
+	"github.com/paulidealiste/ErroneousDilettante/models"
 )
 
 //Reader implements .csv reading methods and data aggregation
