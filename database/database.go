@@ -17,6 +17,7 @@ import (
 var namesBucket = []byte("NAMES")
 var surnamesBucket = []byte("SURNAMES")
 var reviewsBucket = []byte("REVIEWS")
+var peggedBucket = []byte("PEGGED")
 
 //Store is the main database type
 type Store struct {
@@ -34,6 +35,7 @@ func (s *Store) KickstartDB(fnp string) error {
 		tx.CreateBucketIfNotExists(namesBucket)
 		tx.CreateBucketIfNotExists(surnamesBucket)
 		tx.CreateBucketIfNotExists(reviewsBucket)
+		tx.CreateBucketIfNotExists(peggedBucket)
 		return nil
 	})
 	fmt.Println("...")
@@ -79,25 +81,47 @@ func whichBucket(bucket models.TargetBucket) []byte {
 		b = surnamesBucket
 	case models.Reviews:
 		b = reviewsBucket
+	case models.Pegged:
+		b = peggedBucket
 	}
 	return b
 }
 
-//CheerEntities prints all of the entities from one bucket
-func (s *Store) CheerEntities(bucket models.TargetBucket) error {
+//CheerEntities returns all of the entities from one bucket
+func (s *Store) CheerEntities(bucket models.TargetBucket) (models.EntityResponse, error) {
 	ldb, _ := bolt.Open(s.fnp, 0600, nil)
 	s.db = ldb
 	defer s.db.Close()
-	return s.db.View(func(tx *bolt.Tx) error {
+	eresp := models.EntityResponse{}
+	err := s.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket(whichBucket(bucket))
 		c := b.Cursor()
+		eresp.Content = make([]models.EntityModel, b.Stats().KeyN)
+		ai := 0
 		for k, v := c.First(); k != nil; k, v = c.Next() {
 			ment := models.EntityModel{}
 			json.Unmarshal(v, &ment)
-			fmt.Println(ment.Content)
+			eresp.Content[ai] = ment
+			ai++
 		}
 		return nil
 	})
+	return eresp, err
+}
+
+func (s *Store) ClearAllEntities(bucket models.TargetBucket) error {
+	ldb, _ := bolt.Open(s.fnp, 0600, nil)
+	s.db = ldb
+	defer s.db.Close()
+	err := s.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket(whichBucket(bucket))
+		b.ForEach(func(k, v []byte) error {
+			b.Delete(k)
+			return nil
+		})
+		return nil
+	})
+	return err
 }
 
 //CrunchEntities prints randomly concatenated entities from the database

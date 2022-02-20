@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/paulidealiste/ErroneousDilettante/database"
+	"github.com/paulidealiste/ErroneousDilettante/models"
 )
 
 var dbhand dbaseHandler
@@ -24,7 +25,7 @@ type dbaseHandler struct {
 	dbs *database.Store
 }
 
-func (dbh *dbaseHandler) respond() ErroneusResponse {
+func (dbh *dbaseHandler) randomize() ErroneusResponse {
 	var resp ErroneusResponse
 	if dbh.dbs == nil {
 		return resp
@@ -46,6 +47,9 @@ func MockStart(dbs *database.Store) {
 
 	http.HandleFunc("/", dilettanteHandler)
 	http.HandleFunc("/erroneus", erroneusHandler)
+	http.HandleFunc("/pegged", peggedHandler)
+	http.HandleFunc("/pstore", pstoreHandler)
+	http.HandleFunc("/pclear", pclearHandler)
 	log.Println("Listening on localhost:8080/home")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
@@ -72,7 +76,45 @@ func dilettanteHandler(w http.ResponseWriter, r *http.Request) {
 
 func erroneusHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
-	ce := dbhand.respond()
+	ce := dbhand.randomize()
 	a, _ := json.Marshal(ce)
 	w.Write(a)
+}
+
+func peggedHandler(w http.ResponseWriter, r *http.Request) {
+	pegged, err := dbhand.dbs.CheerEntities(models.Pegged)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	a, _ := json.Marshal(pegged.Content)
+	w.Write(a)
+}
+
+func pstoreHandler(w http.ResponseWriter, r *http.Request) {
+	var pegged []string
+	err := json.NewDecoder(r.Body).Decode(&pegged)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	err = dbhand.dbs.HoopEntities(pegged, models.Pegged)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	response := "Ok"
+	w.Write([]byte(response))
+}
+
+func pclearHandler(w http.ResponseWriter, r *http.Request) {
+	err := dbhand.dbs.ClearAllEntities(models.Pegged)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	response := "Ok"
+	w.Write([]byte(response))
 }

@@ -6,12 +6,12 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/paulidealiste/ErroneusDilletante/cmdos"
-	"github.com/paulidealiste/ErroneusDilletante/database"
-	"github.com/paulidealiste/ErroneusDilletante/models"
-	"github.com/paulidealiste/ErroneusDilletante/reader"
-	"github.com/paulidealiste/ErroneusDilletante/webapp"
-	"github.com/paulidealiste/ErroneusDilletante/writer"
+	"github.com/paulidealiste/ErroneousDilettante/cmdos"
+	"github.com/paulidealiste/ErroneousDilettante/database"
+	"github.com/paulidealiste/ErroneousDilettante/models"
+	"github.com/paulidealiste/ErroneousDilettante/reader"
+	"github.com/paulidealiste/ErroneousDilettante/webapp"
+	"github.com/paulidealiste/ErroneousDilettante/writer"
 )
 
 func main() {
@@ -57,10 +57,10 @@ func main() {
 		}
 		repeats = rpts
 	}
-	if *flgs.PerformCrunch == true {
+	if *flgs.PerformCrunch {
 		loopCrunchPrinter(repeats, &rawwriter, &rawdbaser)
 	}
-	if *flgs.StartWebserver == true {
+	if *flgs.StartWebserver {
 		webapp.MockStart(&rawdbaser)
 	}
 }
@@ -89,7 +89,7 @@ func loopCrunchPrinter(repeats int, wwriter *writer.Writer, dbaser *database.Sto
 		}
 		loopcrunched = append(loopcrunched, strng)
 	}
-	if wwriter.OutputSet == true {
+	if wwriter.OutputSet {
 		wwriter.WriteToPath(loopcrunched)
 	} else {
 		for _, lpc := range loopcrunched {

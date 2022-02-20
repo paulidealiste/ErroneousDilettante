@@ -29,3 +29,18 @@ func TestHoopEntities(t *testing.T) {
 	crucn, _ := teststore.CrunchEntities()
 	fmt.Println(crucn)
 }
+
+func TestPeggedStore(t *testing.T) {
+	teststore := Store{}
+	teststore.KickstartDB("test.db")
+	pegged := []string{"Pu Ambroise", "Klix Maneken", "Rax Rale"}
+	err := teststore.HoopEntities(pegged, models.Pegged)
+	if err != nil {
+		t.Error("Error while storing pegged.")
+	}
+	cheered, err := teststore.CheerEntities(models.Pegged)
+	if err != nil {
+		t.Error("Error while cheering pegged.")
+	}
+	fmt.Println(cheered)
+}
